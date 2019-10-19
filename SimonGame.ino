@@ -44,7 +44,7 @@ void setup()
     }
 
     GetReady();     // Play the get ready sequence
-    randomSeed(analogRead(0));  // seed our andom number generator with noise
+
 
     Serial.println();
     Serial.println();
@@ -58,6 +58,8 @@ void setup()
 // ###################################################################
 void GetReady()
 {
+    randomSeed(analogRead(3));  // seed our andom number generator with noise
+    melody[melodyLength] = random(4);
     int index;
     for (int x = 0; x < 10; x++)  // play the below sequence 10 times
     {
@@ -115,8 +117,6 @@ void PlayTheTune()
 // ###################################################################
 void AddANote()
 {
-    Serial.println("SCORE: " + String(melodyLength+1));
-    Serial.println();
     Serial.println("Note Added");
     Serial.println();
 
@@ -167,12 +167,12 @@ void listenForNotes()
 
                         currentNote++; // increase note count
                         //  if all notes in melody correct then stop listening for button presses and add a note
-                        if (currentNote > melodyLength) ListeningForNotes = false; 
+                        if (currentNote > melodyLength) ListeningForNotes = false;
                     }
                     else // if wrong note pressed....
                     {
                         Serial.println("Note " + String(currentNote) + " is WRONG!");
-
+			Serial.println("Your score was " + String(melodyLength));
                         NoteToPlay = notes[index];
 
                         digitalWrite(index + 3, HIGH);
@@ -200,7 +200,6 @@ void listenForNotes()
 // ###################################################################
 void loop() {
     PlayTheTune(); // Play the melody so far
-    delay(100);
     ListeningForNotes = true; // toggle for listening for button presses
 
     currentNote = 0; // start at the first note
